@@ -1,12 +1,15 @@
-package com.hanghae99.dog.entity;
+package com.hanghae99.dog.image.entity;
 
+import com.hanghae99.dog.animal.entity.Animal;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
+@Getter
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,5 +22,6 @@ public class Image {
     public Image(Animal animal, String url) {
         this.animal = animal;
         this.url = url;
+        animal.getImages().add(this);
     }
 }
