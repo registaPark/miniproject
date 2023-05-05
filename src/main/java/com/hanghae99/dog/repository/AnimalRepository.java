@@ -1,2 +1,8 @@
-package com.hanghae99.dog.repository;public interface AnimalRepository {
+package com.hanghae99.dog.repository;
+
+
+import com.hanghae99.dog.entity.Animal;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AnimalRepository extends JpaRepository<Animal,Long> {
 }
