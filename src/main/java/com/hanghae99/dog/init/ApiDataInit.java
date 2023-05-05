@@ -2,11 +2,12 @@ package com.hanghae99.dog.init;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hanghae99.dog.entity.Animal;
-import com.hanghae99.dog.entity.Image;
-import com.hanghae99.dog.repository.AnimalRepository;
-import com.hanghae99.dog.repository.ImageRepository;
+import com.hanghae99.dog.animal.entity.Animal;
+import com.hanghae99.dog.image.entity.Image;
+import com.hanghae99.dog.animal.repository.AnimalRepository;
+import com.hanghae99.dog.image.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
@@ -25,11 +26,13 @@ public class ApiDataInit {
     private final AnimalRepository animalRepository;
     private final ImageRepository imageRepository;
     private final List<Animal> animalList = new ArrayList<>(); //이미지를 넣어주기 위해 리스트로 animal들을 가지고 있음.
+    @Value("${openApi.secret.key}")
+    private String secretKey; // 공공Api SecretKey 숨기기 위해 Value로 받아옴
     @PostConstruct
     @Transactional
     public void init(){
         try {
-            URL url = new URL("http://openapi.seoul.go.kr:8088/6b53454b47616d6934344d7a585076/json/TbAdpWaitAnimalView/1/28"); //유기동물 정보 받아오는 공공 api
+            URL url = new URL("http://openapi.seoul.go.kr:8088/"+secretKey+"/json/TbAdpWaitAnimalView/1/100"); //유기동물 정보 받아오는 공공 api
             HttpURLConnection conn =(HttpURLConnection) url.openConnection(); // 커넥션 연결
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept","application/json");
@@ -52,6 +55,8 @@ public class ApiDataInit {
                 String age = rowNode.path("AGE").asText();
                 Float weight =Float.parseFloat(rowNode.path("BDWGH").asText());
                 String adpSttus = rowNode.path("ADP_STTUS").asText();
+                String introduceUrl = rowNode.path("INTRCN_MVP_URL").asText();
+                String tmprPrtcCn = rowNode.path("TMPR_PRTC_CN").asText();
                 Animal animal = Animal.builder() //Animal 객체 생성
                         .animalNo(animalId)
                         .name(name)
@@ -62,6 +67,8 @@ public class ApiDataInit {
                         .age(age)
                         .weight(weight)
                         .adpStatus(adpSttus)
+                        .introduceUrl(introduceUrl)
+                        .tmpr(tmprPrtcCn)
                         .build();
                 animalList.add(animal); // Aniaml 리스트에 추가
                 animalRepository.save(animal); // Animal 저장
@@ -79,7 +86,7 @@ public class ApiDataInit {
         for(Animal animal : animalList){
             URL getPhotoUrl = null;
             try {
-                getPhotoUrl = new URL("http://openapi.seoul.go.kr:8088/6b53454b47616d6934344d7a585076/json/TbAdpWaitAnimalPhotoView/1/5/?STAGE_SN=2&fileNm="+animal.getAnimalNo()); // 이미지 url 받아오기 위한 공공api
+                getPhotoUrl = new URL("http://openapi.seoul.go.kr:8088/"+secretKey+"/json/TbAdpWaitAnimalPhotoView/1/5/?STAGE_SN=2&fileNm="+animal.getAnimalNo()); // 이미지 url 받아오기 위한 공공api
                 HttpURLConnection conn2 =(HttpURLConnection) getPhotoUrl.openConnection();
                 conn2.setRequestMethod("GET");
                 conn2.setRequestProperty("Accept","application/json");
