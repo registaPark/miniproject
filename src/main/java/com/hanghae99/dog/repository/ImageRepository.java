@@ -1,2 +1,7 @@
-package com.hanghae99.dog.repository;public interface ImageRepository {
+package com.hanghae99.dog.repository;
+
+import com.hanghae99.dog.entity.Image;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ImageRepository extends JpaRepository<Image,Long> {
 }
