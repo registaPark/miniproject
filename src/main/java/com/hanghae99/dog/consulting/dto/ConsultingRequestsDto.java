@@ -1,7 +1,6 @@
 package com.hanghae99.dog.consulting.dto;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Pattern;
