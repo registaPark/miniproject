@@ -2,12 +2,10 @@ package com.hanghae99.dog.animal.dto;
 
 import com.hanghae99.dog.animal.entity.Animal;
 import com.hanghae99.dog.image.dto.ImageResponseDto;
-import com.hanghae99.dog.image.entity.Image;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

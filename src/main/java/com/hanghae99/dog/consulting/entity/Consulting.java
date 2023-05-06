@@ -3,9 +3,7 @@ package com.hanghae99.dog.consulting.entity;
 import com.hanghae99.dog.consulting.dto.ConsultingRequestsDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.persistence.*;
 
