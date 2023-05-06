@@ -75,29 +75,29 @@ public class CommentService {
     // 댓글 좋아요 API
     @Transactional
     public ResponseEntity CommentGood(Long commentId, CmtRequestDto cmtRequestDto) {
-        // 요청받은 commentId 값을 가진 댓글을 조회합니다.
+
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
 
-        // 현재 사용자가 해당 댓글에 대해 좋아요를 이미 눌렀는지 조회합니다.
+
         CommentLike commentLike = commentLikeRepository.findByUsernameAndComment(cmtRequestDto.getUsername(), comment);
 
-        if (commentLike == null) { // 사용자가 해당 댓글에 대해 좋아요를 처음 요청하는 경우
-            // CommentGood 테이블에 새로운 레코드를 생성하고, Comment의 좋아요 수를 1 증가시킵니다.
+        if (commentLike == null) {
+
             commentLikeRepository.save(new CommentLike(cmtRequestDto.getUsername(), comment));
             comment.setLike(comment.getCommentlike() + 1);
             commentRepository.save(comment);
 
-            // 요청이 성공한 경우, 클라이언트에게 "좋아요 성공" 메시지와 상태코드 200을 반환합니다.
+
             MsgResponseDto msgResponseDto = new MsgResponseDto("좋아요 성공", 200);
             return ResponseEntity.status(HttpStatus.OK).body(msgResponseDto);
-        } else { // 사용자가 이미 해당 댓글에 대해 좋아요를 누른 경우
-            // CommentGood 테이블에서 해당 레코드를 삭제하고, Comment의 좋아요 수를 1 감소시킵니다.
+        } else {
+
             commentLikeRepository.delete(commentLike);
             comment.setLike(comment.getCommentlike() - 1);
             commentRepository.save(comment);
 
-            // 요청이 성공한 경우, 클라이언트에게 "좋아요 삭제 성공" 메시지와 상태코드 200을 반환합니다.
+
             MsgResponseDto msgResponseDto = new MsgResponseDto("좋아요 삭제 성공", 200);
             return ResponseEntity.status(HttpStatus.OK).body(msgResponseDto);
         }
@@ -114,5 +114,16 @@ public class CommentService {
             allResponseDto.add(new AllResponseDto(animal, commentResponseDto));
         }
         return allResponseDto;
+    }
+
+    //선택 게시글 조회
+    @Transactional(readOnly = true)
+    public AllResponseDto getOnePost(Long id) {
+        Animal animal = animalRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
+        );
+        List<CmtResponseDto> comments = commentRepository.findAllComment(id);
+
+        return new AllResponseDto(animal,comments);
     }
 }
