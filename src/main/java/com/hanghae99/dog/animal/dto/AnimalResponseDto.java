@@ -1,10 +1,13 @@
 package com.hanghae99.dog.animal.dto;
 
 import com.hanghae99.dog.animal.entity.Animal;
+import com.hanghae99.dog.image.dto.ImageResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class AnimalResponseDto {
@@ -19,8 +22,9 @@ public class AnimalResponseDto {
     private String adpStatus;
     private String tmpr;
     private String introduceUrl;
+    private List<ImageResponseDto> images;
     @Builder
-    public AnimalResponseDto(Long animalNo, String name, LocalDate entrance_date, String species, String breed, String sex, String age, Float weight, String adpStatus,String tmpr,String introduceUrl) {
+    public AnimalResponseDto(Long animalNo, String name, LocalDate entrance_date, String species, String breed, String sex, String age, Float weight, String adpStatus,String tmpr,String introduceUrl, List<ImageResponseDto> images) {
         this.animalNo = animalNo;
         this.name = name;
         this.entrance_date = entrance_date;
@@ -32,8 +36,10 @@ public class AnimalResponseDto {
         this.adpStatus = adpStatus;
         this.tmpr = tmpr;
         this.introduceUrl = introduceUrl;
+        this.images = images;
     }
     public static AnimalResponseDto from(Animal animal){
+        List<ImageResponseDto> images = animal.getImages().stream().map(i -> new ImageResponseDto(i)).collect(Collectors.toList());
         return AnimalResponseDto
                 .builder()
                 .animalNo(animal.getAnimalNo())
@@ -45,6 +51,7 @@ public class AnimalResponseDto {
                 .age(animal.getAge())
                 .weight(animal.getWeight())
                 .adpStatus(animal.getAdpStatus())
+                .images(images)
                 .tmpr(animal.getTmpr())
                 .introduceUrl(animal.getIntroduceUrl())
                 .build();

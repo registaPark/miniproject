@@ -25,6 +25,12 @@ public class CommentController {
         return commentService.getPost();
     }
 
+    //게시글 상세조회
+    @GetMapping("/{id}")
+    public AllResponseDto getPost(@PathVariable Long id){
+        return commentService.getOnePost(id);
+    }
+
     //댓글 작성
     @PostMapping("/comment")
     public CmtResponseDto addComment(@RequestBody CmtRequestDto cmtRequestDto){
