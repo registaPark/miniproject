@@ -3,9 +3,7 @@ package com.hanghae99.dog.init;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanghae99.dog.animal.entity.Animal;
-import com.hanghae99.dog.image.entity.Image;
 import com.hanghae99.dog.animal.repository.AnimalRepository;
-import com.hanghae99.dog.image.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -24,7 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApiDataInit {
     private final AnimalRepository animalRepository;
-    private final ImageRepository imageRepository;
     private final List<Animal> animalList = new ArrayList<>(); //이미지를 넣어주기 위해 리스트로 animal들을 가지고 있음.
     @Value("${openApi.secret.key}")
     private String secretKey; // 공공Api SecretKey 숨기기 위해 Value로 받아옴
@@ -76,39 +73,7 @@ public class ApiDataInit {
             conn.disconnect(); //커넥션 리소스 해제
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }finally {
-            imageUrlSetting(); // 이미지 url DB에 넣기 위해 finally에서 실행
         }
     }
-
-    @Transactional
-    public void imageUrlSetting() {
-        for(Animal animal : animalList){
-            URL getPhotoUrl = null;
-            try {
-                getPhotoUrl = new URL("http://openapi.seoul.go.kr:8088/"+secretKey+"/json/TbAdpWaitAnimalPhotoView/1/5/?STAGE_SN=2&fileNm="+animal.getAnimalNo()); // 이미지 url 받아오기 위한 공공api
-                HttpURLConnection conn2 =(HttpURLConnection) getPhotoUrl.openConnection();
-                conn2.setRequestMethod("GET");
-                conn2.setRequestProperty("Accept","application/json");
-                if(conn2.getResponseCode() != 200){
-                    throw new RuntimeException("이미지를 불러올수 없습니다.");
-                }
-                BufferedReader imageBr = new BufferedReader(new InputStreamReader(conn2.getInputStream()));
-                ObjectMapper objectMapper = new ObjectMapper();
-                JsonNode jsonNode = objectMapper.readTree(imageBr);
-                JsonNode rows = jsonNode.path("TbAdpWaitAnimalPhotoView").path("row");
-                for (JsonNode row : rows) { // image엔티티로 매핑해주기 위한 작업
-                    String imageUrl = row.path("PHOTO_URL").asText();
-                    Image image = Image.builder().animal(animal).url(imageUrl).build(); // 이미지 엔티티 생성
-                    imageRepository.save(image); // 이미지 저장
-                }
-                conn2.disconnect(); // 커넥션 리소스 해제
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-
 
 }
