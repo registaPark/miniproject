@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.persistence.*;
 
@@ -35,3 +36,6 @@ public class Consulting {
 
 
 }
+
+
+
