@@ -1,6 +1,5 @@
 package com.hanghae99.dog.animal.entity;
 
-import com.hanghae99.dog.image.entity.Image;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +7,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -28,8 +26,6 @@ public class Animal {
     @Column(length = 10000)
     private String tmpr;
     private String introduceUrl;
-    @OneToMany(mappedBy = "animal",cascade = CascadeType.REMOVE)
-    private List<Image> images = new ArrayList<>();
 
     @Builder //빌더 패턴 사용
     public Animal(Long animalNo, String name, LocalDate entrance_date, String species, String breed, String sex, String age, Float weight, String adpStatus,String tmpr,String introduceUrl) {
