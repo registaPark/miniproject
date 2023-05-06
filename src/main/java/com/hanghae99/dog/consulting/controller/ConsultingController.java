@@ -10,16 +10,17 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/post/")
 public class ConsultingController {
     private final ConsultingService consultingService;
 
 
-    @PostMapping("/api/post/consulting")
+    @PostMapping("/consulting")
     public ConsultingResponseDto applyConsulting(@RequestBody ConsultingRequestsDto dto) {
         return consultingService.applyConsulting(dto);
     }
 
-    @DeleteMapping("/api/post/consulting/{id}")
+    @DeleteMapping("/consulting/{id}")
     public CancelConsultingResponseDto cancelConsulting(@PathVariable Long id) {
         return consultingService.cancelConsulting(id);
     }
