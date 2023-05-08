@@ -38,6 +38,7 @@ public class CommentController {
     public ResponseEntity addComment(@RequestBody CmtRequestDto cmtRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return commentService.addComment(cmtRequestDto,userDetails.getUser());
     }
+    
 
     //댓글 수정
     @PutMapping("/comment/{id}")
