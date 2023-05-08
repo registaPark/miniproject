@@ -21,6 +21,8 @@ public class AnimalController {
     public ResponseEntity<List<AnimalResponseDto>> findAnimalList(){
         return ResponseEntity.ok(animalService.findAnimalList());
     }
+
+
     @CrossOrigin("*")
     @GetMapping("/detail/{id}") //AnimalNo값으로 가져오기
     public ResponseEntity<AllResponseDto> findByAnimalId(@PathVariable Long id){
