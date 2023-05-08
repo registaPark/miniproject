@@ -32,7 +32,7 @@ public class CommentService {
 
     //댓글 작성
     @Transactional
-    public CmtResponseDto addComment(CmtRequestDto cmtRequestDto, User user) {
+    public ResponseEntity addComment(CmtRequestDto cmtRequestDto, User user) {
 
 
         Animal animal = animalRepository.findById(cmtRequestDto.getAnimal_no()).orElseThrow(
@@ -42,7 +42,8 @@ public class CommentService {
 
         Comment comment = new Comment(cmtRequestDto, animal, user.getUsername());
         commentRepository.saveAndFlush(comment);
-        return new CmtResponseDto(comment);
+        CmtResponseDto cmtResponseDto = new CmtResponseDto(comment);
+        return ResponseEntity.status(200).body(cmtResponseDto);
 
     }
 
@@ -136,29 +137,29 @@ public class CommentService {
         }
     }
 
-    //선택 게시글 조회
-    @Transactional(readOnly = true)
-    public AllResponseDto getOneAnimal(Long id) {
-
-        Animal animal = animalRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
-        );
-        List<CmtResponseDto> comments = commentRepository.findAllComment(id);
-
-        return new AllResponseDto(animal,comments);
-    }
-
-    //게시글 전체 조회
-    @Transactional(readOnly = true)
-    public List<AllResponseDto> getPost() {
-        List<AllResponseDto> allResponseDto = new ArrayList();
-        List<Animal> animalList = animalRepository.findAll();
-        for(Animal animal : animalList){
-            List<CmtResponseDto> commentResponseDto;
-            commentResponseDto = commentRepository.findAllCommentByAnimal_id(animal.getAnimalNo());
-            allResponseDto.add(new AllResponseDto(animal, commentResponseDto));
-        }
-        return allResponseDto;
-    }
+//    //선택 게시글 조회
+//    @Transactional(readOnly = true)
+//    public AllResponseDto getOneAnimal(Long id) {
+//
+//        Animal animal = animalRepository.findById(id).orElseThrow(
+//                () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
+//        );
+//        List<CmtResponseDto> comments = commentRepository.findAllComment(id);
+//
+//        return new AllResponseDto(animal,comments);
+//    }
+//
+//    //게시글 전체 조회
+//    @Transactional(readOnly = true)
+//    public List<AllResponseDto> getPost() {
+//        List<AllResponseDto> allResponseDto = new ArrayList();
+//        List<Animal> animalList = animalRepository.findAll();
+//        for(Animal animal : animalList){
+//            List<CmtResponseDto> commentResponseDto;
+//            commentResponseDto = commentRepository.findAllCommentByAnimal_id(animal.getAnimalNo());
+//            allResponseDto.add(new AllResponseDto(animal, commentResponseDto));
+//        }
+//        return allResponseDto;
+//    }
 
 }

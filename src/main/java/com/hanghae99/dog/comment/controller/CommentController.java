@@ -20,22 +20,22 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    //게시글 목록조회
-    @GetMapping("/posts")
-    public List<AllResponseDto> getPost(){
-        return commentService.getPost();
-    }
+//    //게시글 목록조회
+//    @GetMapping("/posts")
+//    public List<AllResponseDto> getPost(){
+//        return commentService.getPost();
+//    }
 
-    //게시글 상세조회
-    @CrossOrigin("*")
-    @GetMapping("/detail/{id}")
-    public AllResponseDto getOneAnimal(@PathVariable Long id){
-        return commentService.getOneAnimal(id);
-    }
+//    //게시글 상세조회
+//    @CrossOrigin("*")
+//    @GetMapping("/detail/{id}")
+//    public AllResponseDto getOneAnimal(@PathVariable Long id){
+//        return commentService.getOneAnimal(id);
+//    }
 
     //댓글 작성
     @PostMapping("/comment")
-    public CmtResponseDto addComment(@RequestBody CmtRequestDto cmtRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity addComment(@RequestBody CmtRequestDto cmtRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return commentService.addComment(cmtRequestDto,userDetails.getUser());
     }
 

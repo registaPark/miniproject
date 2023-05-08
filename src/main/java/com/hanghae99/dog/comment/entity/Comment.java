@@ -4,11 +4,13 @@ import com.hanghae99.dog.comment.dto.CmtRequestDto;
 import com.hanghae99.dog.animal.entity.Animal;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 import javax.persistence.*;
 
 @Getter
+@Setter
 @Entity
 @NoArgsConstructor
 public class Comment {
@@ -41,7 +43,6 @@ public class Comment {
     }
 
 
-
     public void update(CmtRequestDto cmtRequestDto) {
         this.content = cmtRequestDto.getContent();
     }
@@ -49,6 +50,9 @@ public class Comment {
     public void setLike(long like) {
         this.commentlike = like;
     }
+
+
+
 
 
 
