@@ -24,6 +24,7 @@ public class AllResponseDto {
     private String age;
     private Float weight;
     private String adpStatus;
+    private String introduce_url;
     private List<CmtResponseDto> comments;
 
     public AllResponseDto(Animal animal, List<CmtResponseDto> comments) {
@@ -37,5 +38,6 @@ public class AllResponseDto {
         this.weight = animal.getWeight();
         this.adpStatus = animal.getAdpStatus();
         this.comments = comments;
+        this.introduce_url = animal.getIntroduceUrl();
     }
 }
