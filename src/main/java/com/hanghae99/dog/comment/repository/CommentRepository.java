@@ -24,5 +24,4 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("select c from Comment c where c.animal.animalNo = :id")
     List<CmtResponseDto> findAllComment(@Param("id") Long id);
 
-    List<CmtResponseDto> findAllCommentByPostId(Long id);
 }
