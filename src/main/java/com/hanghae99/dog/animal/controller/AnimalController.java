@@ -17,7 +17,7 @@ import java.util.List;
 public class AnimalController {
     private final AnimalService animalService;
     @CrossOrigin("*")
-    @GetMapping("/list") // AniamlList 가져오기
+    @GetMapping("/li") // AniamlList 가져오기
     public ResponseEntity<List<AnimalResponseDto>> findAnimalList(){
         return ResponseEntity.ok(animalService.findAnimalList());
     }
