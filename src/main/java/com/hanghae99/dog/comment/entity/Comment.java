@@ -26,7 +26,7 @@ public class Comment {
     private String username;
 
     @ManyToOne //(fetch = FetchType.EAGER)
-    @JoinColumn(name="Post_id", nullable = false)
+    @JoinColumn(name="Animal_id", nullable = false)
     private Animal animal;
 
     @Column
@@ -34,11 +34,12 @@ public class Comment {
 
 
 
-    public Comment(CmtRequestDto cmtRequestDto, Animal animal) { //댓글 작성
+    public Comment(CmtRequestDto cmtRequestDto, Animal animal, String username) { //댓글 작성
         this.content = cmtRequestDto.getContent();
-        this.username = cmtRequestDto.getUsername();
+        this.username = username;
         this.animal = animal;
     }
+
 
 
     public void update(CmtRequestDto cmtRequestDto) {
@@ -48,6 +49,12 @@ public class Comment {
     public void setLike(long like) {
         this.commentlike = like;
     }
+
+
+
+
+
+
 
 
 }
