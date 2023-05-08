@@ -24,7 +24,7 @@ public class AnimalService {
 
     public AllResponseDto findAnimalById(Long id){ //AnimalNo로 단건조회
         Animal animal = animalRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("유기견을 찾을 수 없습니다."));
-        List<CmtResponseDto> allCommentByPostId = commentRepository.findAllCommentByPostId(id);
+        List<CmtResponseDto> allCommentByPostId = commentRepository.findAllCommentByAnimal_id(id);
         AllResponseDto allResponseDto = new AllResponseDto(animal, allCommentByPostId);
         return  allResponseDto;
     }
