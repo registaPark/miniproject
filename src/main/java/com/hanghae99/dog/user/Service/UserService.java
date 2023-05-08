@@ -1,6 +1,7 @@
 package com.hanghae99.dog.user.Service;
 
 
+import antlr.Token;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,9 +10,12 @@ import com.hanghae99.dog.global.Exception.ErrorCode;
 import com.hanghae99.dog.user.Dto.KakaoUserInfoDto;
 import com.hanghae99.dog.user.Dto.StatusResponseDto;
 import com.hanghae99.dog.user.Dto.UserRequestDto;
+import com.hanghae99.dog.user.Entity.RefreshToken;
 import com.hanghae99.dog.user.Entity.User;
 import com.hanghae99.dog.user.Entity.UserRoleEnum;
 import com.hanghae99.dog.user.Jwt.JwtUtil;
+import com.hanghae99.dog.user.Jwt.TokenDto;
+import com.hanghae99.dog.user.Repository.RefreshTokenRepository;
 import com.hanghae99.dog.user.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +26,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -36,9 +42,11 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+    private final RefreshTokenRepository refreshTokenRepository;
     @Value("${user.admin.token}")
     private String ADMIN_TOKEN;
 
+    @Transactional
     public StatusResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getToken(code);
@@ -49,9 +57,10 @@ public class UserService {
         // 3. 필요시에 회원가입
         User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
 
+        TokenDto tokenDto = jwtUtil.createAllToken(kakaoUser.getUsername(), kakaoUser.getRole());
         // 4. JWT 토큰 반환
-//        String createToken =  jwtUtil.createToken(kakaoUser.getUsername(), kakaoUser.getRole());
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(kakaoUser.getUsername(), kakaoUser.getRole()));
+        response.addHeader(JwtUtil.ACCESS_KEY, tokenDto.getAccessToken());
+        response.addHeader(JwtUtil.REFRESH_KEY, tokenDto.getRefreshToken());
 
         return new StatusResponseDto(200, "로그인 성공.");
     }
@@ -118,6 +127,7 @@ public class UserService {
     }
 
     // 3. 필요시에 회원가입
+
     private User registerKakaoUserIfNeeded(KakaoUserInfoDto kakaoUserInfo) {
         // DB 에 중복된 Kakao Id 가 있는지 확인
         Long kakaoId = kakaoUserInfo.getId();
@@ -134,6 +144,7 @@ public class UserService {
         return kakaoUser;
     }
 
+    @Transactional
     public StatusResponseDto signUp(UserRequestDto userRequestDto) {
         if (userRepository.findByUsername(userRequestDto.getUsername()).isPresent()) {
             throw new CustomException(ErrorCode.INVALID_USER_EXISTENCE);
@@ -154,6 +165,7 @@ public class UserService {
         }return new StatusResponseDto(200, "회원가입 성공.");
     }
 
+    @Transactional
     public StatusResponseDto login(UserRequestDto userRequestDto, HttpServletResponse servletResponse) {
         User user = userRepository.findByUsername(userRequestDto.getUsername()).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
@@ -161,12 +173,25 @@ public class UserService {
         if (!user.getPassword().equals(userRequestDto.getPassword())) {
             throw new CustomException(ErrorCode.INVALID_USER_PASSWORD);
         }
-        servletResponse.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
+        TokenDto tokenDto = jwtUtil.createAllToken(user.getUsername(), user.getRole());
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUsername(user.getUsername());
+
+        if (refreshToken.isPresent()) {
+            refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken()));
+        } else {
+            RefreshToken newToken = new RefreshToken(tokenDto.getRefreshToken(), user.getUsername());
+            refreshTokenRepository.save(newToken);
+        }
+        servletResponse.addHeader(JwtUtil.ACCESS_KEY, tokenDto.getAccessToken());
+        servletResponse.addHeader(JwtUtil.REFRESH_KEY, tokenDto.getRefreshToken());
         return new StatusResponseDto(200, "로그인 성공");
     }
 
     public StatusResponseDto logout(User user, HttpServletResponse servletResponse) {
-        servletResponse.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createLogoutToken(user.getUsername(), user.getRole()));
+        TokenDto tokenDto = jwtUtil.createAllLogoutToken(user.getUsername(), user.getRole());
+        servletResponse.addHeader(JwtUtil.ACCESS_KEY, tokenDto.getAccessToken());
+        servletResponse.addHeader(JwtUtil.REFRESH_KEY, tokenDto.getRefreshToken());
+        refreshTokenRepository.deleteByUsername(user.getUsername());
         return new StatusResponseDto(200, "로그아웃 성공.");
     }
 }
