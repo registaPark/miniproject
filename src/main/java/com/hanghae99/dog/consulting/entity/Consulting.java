@@ -1,5 +1,6 @@
 package com.hanghae99.dog.consulting.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hanghae99.dog.consulting.dto.ConsultingRequestsDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,14 +21,14 @@ public class Consulting {
     private Long id;
 
     private String username;
-    @Column(name="\"day\"")
-    private String day;
+
+    private String days;
     private String time;
     private String phoneNumber;
 
     public Consulting(ConsultingRequestsDto dto) {
         this.username = dto.getUsername();
-        this.day = dto.getDay();
+        this.days = dto.getDays();
         this.time = dto.getTime();
         this.phoneNumber = dto.getPhoneNumber();
     }
