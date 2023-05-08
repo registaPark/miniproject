@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin("*")
@@ -23,13 +24,11 @@ import org.springframework.web.bind.annotation.*;
 public class ConsultingController {
     private final ConsultingService consultingService;
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/consulting")
-    public ResponseEntity<?> applyConsulting(@RequestBody ConsultingRequestsDto dto, Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new AccessDeniedException("인증되지 않은 사용자입니다.");
-        }
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        Long userId = userDetails.getUser().getId();
+    public ResponseEntity<?> applyConsulting(@RequestBody ConsultingRequestsDto dto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        Long userId = user.getId();
         ConsultingResponseDto responseDto = consultingService.applyConsulting(dto, userId);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -38,7 +37,7 @@ public class ConsultingController {
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @DeleteMapping("/consulting/{id}")
-    public ResponseEntity<CancelConsultingResponseDto> cancelConsulting(@PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<CancelConsultingResponseDto> cancelConsulting(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         CancelConsultingResponseDto responseDto = consultingService.cancelConsulting(id);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
