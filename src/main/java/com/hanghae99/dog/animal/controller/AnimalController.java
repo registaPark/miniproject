@@ -2,6 +2,7 @@ package com.hanghae99.dog.animal.controller;
 
 import com.hanghae99.dog.animal.dto.AnimalResponseDto;
 import com.hanghae99.dog.animal.service.AnimalService;
+import com.hanghae99.dog.comment.dto.AllResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class AnimalController {
     }
     @CrossOrigin("*")
     @GetMapping("/detail/{id}") //AnimalNo값으로 가져오기
-    public ResponseEntity<AnimalResponseDto> findByAnimalId(@PathVariable Long id){
+    public ResponseEntity<AllResponseDto> findByAnimalId(@PathVariable Long id){
         return ResponseEntity.ok(animalService.findAnimalById(id));
     }
 }
