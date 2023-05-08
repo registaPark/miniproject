@@ -2,7 +2,7 @@ package com.hanghae99.dog.user.Jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanghae99.dog.user.Dto.StatusResponseDto;
-import io.jsonwebtoken.Claims;
+import com.hanghae99.dog.user.Entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,27 +21,41 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwtUtils;
+    private final JwtUtil jwtUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String token = jwtUtils.resolveToken(request);
+        // JWT 토큰을 해석하여 추출
+        String accessToken = jwtUtil.resolveToken(request, JwtUtil.ACCESS_KEY);
+        String refreshToken = jwtUtil.resolveToken(request, JwtUtil.REFRESH_KEY);
 
-        if(token != null) {
-            if(!jwtUtils.validateToken(token)){
-                jwtExceptionHandler(response, "Token Error", HttpStatus.UNAUTHORIZED.value());
-                return;
-            }
-            Claims info = jwtUtils.getUserInfoFromToken(token);
-            setAuthentication(info.getSubject());
+        String checkRefresh = jwtUtil.checkRefresh(accessToken, refreshToken);
+        if (checkRefresh.equals("success")) {
+            setAuthentication(jwtUtil.getUserInfoFromToken(accessToken));
+        } else if (checkRefresh.equals("access")) {
+            String username = jwtUtil.getUserInfoFromToken(accessToken);
+            User user = jwtUtil.checkGetUserByUsername(username);
+            String newRefreshToken = jwtUtil.createToken(username, user.getRole(), "Refresh");
+            response.setHeader(JwtUtil.REFRESH_KEY, newRefreshToken);
+            setAuthentication(username);
+        } else if (checkRefresh.equals("refresh")) {
+            String username = jwtUtil.getUserInfoFromToken(refreshToken);
+            User user = jwtUtil.checkGetUserByUsername(username);
+            String newAccessToken = jwtUtil.createToken(username, user.getRole(), "Access");
+            response.setHeader(JwtUtil.ACCESS_KEY, newAccessToken);
+            setAuthentication(username);
+        } else if (checkRefresh.equals("fail")) {
+            filterChain.doFilter(request, response);
+        } else {
+            jwtExceptionHandler(response, "not valid token", HttpStatus.BAD_REQUEST.value());
         }
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 
     public void setAuthentication(String username) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
-        Authentication authentication = jwtUtils.createAuthentication(username);
+        Authentication authentication = jwtUtil.createAuthentication(username);
         context.setAuthentication(authentication);
 
         SecurityContextHolder.setContext(context);

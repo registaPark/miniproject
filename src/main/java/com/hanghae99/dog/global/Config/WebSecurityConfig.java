@@ -2,6 +2,7 @@ package com.hanghae99.dog.global.Config;
 
 import com.hanghae99.dog.user.Jwt.JwtAuthFilter;
 import com.hanghae99.dog.user.Jwt.JwtUtil;
+import com.hanghae99.dog.user.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
