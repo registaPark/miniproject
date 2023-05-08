@@ -10,7 +10,7 @@ env:
   PROJECT_NAME: mini_project
   BUCKET_NAME: github-action-s3-bucket
   CODE_DEPLOY_APP_NAME: my-codedeploy-app
-  CODE_DEPLOY_GROUP_NAME: my-codedeploy-deployment-group
+  DEPLOYMENT_GROUP_NAME: my-codedeploy-deployment-group
 
 jobs:
   build:
