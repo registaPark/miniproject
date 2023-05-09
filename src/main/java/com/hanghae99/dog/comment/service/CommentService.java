@@ -11,13 +11,10 @@ import com.hanghae99.dog.global.Security.UserDetailsImpl;
 import com.hanghae99.dog.user.Entity.User;
 import com.hanghae99.dog.user.Entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 import java.util.List;
 
 
