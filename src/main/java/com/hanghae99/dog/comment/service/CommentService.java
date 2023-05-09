@@ -148,17 +148,17 @@ public class CommentService {
         return new AllResponseDto(animal,comments);
     }
 
-    //게시글 전체 조회
-    @Transactional(readOnly = true)
-    public List<AllResponseDto> getPost() {
-        List<AllResponseDto> allResponseDto = new ArrayList();
-        List<Animal> animalList = animalRepository.findAll();
-        for(Animal animal : animalList){
-            List<CmtResponseDto> commentResponseDto;
-            commentResponseDto = commentRepository.findAllCommentByAnimal_id(animal.getAnimalNo());
-            allResponseDto.add(new AllResponseDto(animal, commentResponseDto));
-        }
-        return allResponseDto;
-    }
+//    //게시글 전체 조회
+//    @Transactional(readOnly = true)
+//    public List<AllResponseDto> getPost() {
+//        List<AllResponseDto> allResponseDto = new ArrayList();
+//        List<Animal> animalList = animalRepository.findAll();
+//        for(Animal animal : animalList){
+//            List<CmtResponseDto> commentResponseDto;
+//            commentResponseDto = commentRepository.findAllCommentByAnimal_id(animal.getAnimalNo());
+//            allResponseDto.add(new AllResponseDto(animal, commentResponseDto));
+//        }
+//        return allResponseDto;
+//    }
 
 }
