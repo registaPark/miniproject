@@ -8,28 +8,30 @@ import com.hanghae99.dog.user.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
     
 
     private final UserService userService;
 
-    @PostMapping("/api/signup")
-    public ResponseEntity<String> signup(@RequestBody UserRequestDto userRequestDto) {
+    @PostMapping("/signup")
+    public ResponseEntity<String> signup(@Valid @RequestBody UserRequestDto userRequestDto) {
         return userService.signup(userRequestDto);
     }
-    @PostMapping("/api/login")
+    @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserRequestDto userRequestDto, HttpServletResponse response) {
         return userService.login(userRequestDto, response);
     }
 
-    @PostMapping("/api/logout")
+    @PostMapping("/logout")
     public ResponseEntity<String> logout(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response) {
         return userService.logout(userDetails.getUser(), response);
     }
