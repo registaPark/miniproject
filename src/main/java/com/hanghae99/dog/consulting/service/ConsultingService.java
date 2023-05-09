@@ -29,8 +29,6 @@ public class ConsultingService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
-
-
         Consulting consulting = new Consulting(dto, user);
         Consulting savedConsulting = consultingRepository.save(consulting);
         return new ConsultingResponseDto(savedConsulting);
