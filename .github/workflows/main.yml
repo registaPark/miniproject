@@ -11,7 +11,8 @@ env:
   BUCKET_NAME: github-action-s3-bucket
   CODE_DEPLOY_APP_NAME: my-codedeploy-app
   DEPLOYMENT_GROUP_NAME: my-codedeploy-deployment-group
-
+  ACCESS_KEY: AKIA2GZ5GCWBTRO5CR7Z
+  SECRET_KEY: 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
 jobs:
   build:
     permissions:
@@ -39,8 +40,8 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-access-key-id: $ACCESS_KEY
+        aws-secret-access-key: $SECRET_KEY
         aws-region: ap-northeast-2
     - name: Upload to S3
       run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
