@@ -47,7 +47,7 @@ public class WebSecurityConfig {
         // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.authorizeRequests().antMatchers("/api/login", "/api/signup", "/api/login").permitAll()
+        http.authorizeRequests().antMatchers("/api/login", "/api/signup").permitAll()
                 .antMatchers("/api/list").permitAll()
                 .antMatchers("/api/detail/**").permitAll()
                 .antMatchers("/home").permitAll()
