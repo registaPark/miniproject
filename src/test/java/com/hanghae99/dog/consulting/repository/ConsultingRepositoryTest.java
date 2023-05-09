@@ -1,15 +1,13 @@
 package com.hanghae99.dog.consulting.repository;
 
 import com.hanghae99.dog.consulting.entity.Consulting;
-import com.hanghae99.dog.consulting.repository.ConsultingRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 import javax.transaction.Transactional;
 import java.util.List;

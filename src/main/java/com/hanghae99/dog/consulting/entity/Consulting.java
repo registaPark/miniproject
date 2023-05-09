@@ -1,6 +1,5 @@
 package com.hanghae99.dog.consulting.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hanghae99.dog.consulting.dto.ConsultingRequestsDto;
 import com.hanghae99.dog.user.Entity.User;
 import lombok.Getter;

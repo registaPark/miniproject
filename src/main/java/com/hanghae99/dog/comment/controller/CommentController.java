@@ -1,6 +1,5 @@
 package com.hanghae99.dog.comment.controller;
 
-import com.hanghae99.dog.comment.dto.AllResponseDto;
 import com.hanghae99.dog.comment.dto.CmtRequestDto;
 import com.hanghae99.dog.comment.dto.CmtResponseDto;
 
@@ -11,7 +10,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import com.hanghae99.dog.global.Security.UserDetailsImpl;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/post")
