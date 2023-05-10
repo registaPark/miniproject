@@ -30,23 +30,39 @@ public class UserService {
     @Value("${user.admin.token}")
     private String ADMIN_TOKEN;
 
+//    @Transactional
+//    public ResponseEntity<String> signup(UserRequestDto userRequestDto) {
+//        if (userRepository.findByUsername(userRequestDto.getUsername()).isPresent()) {
+//            throw new CustomException(ErrorCode.INVALID_USER_EXISTENCE);
+//        } else {
+//            if (userRequestDto.isAdmin()) {
+//                if (userRequestDto.getAdminToken() == null) {
+//                    throw new CustomException(ErrorCode.INVALID_TOKEN);
+//                } else {
+//                    if (userRequestDto.getAdminToken().equals(ADMIN_TOKEN)) {
+//                        userRepository.save(new User(userRequestDto.getUsername(), userRequestDto.getPassword(), UserRoleEnum.ADMIN));
+//                    } else {
+//                        throw new CustomException(ErrorCode.INVALID_TOKEN);
+//                    }
+//                }
+//            } else {
+//                userRepository.save(new User(userRequestDto.getUsername(), userRequestDto.getPassword(), UserRoleEnum.USER));
+//            }
+//        }
+//        return new ResponseEntity<>("회원가입 성공.", HttpStatus.OK);
+//    }
+
     @Transactional
     public ResponseEntity<String> signup(UserRequestDto userRequestDto) {
         if (userRepository.findByUsername(userRequestDto.getUsername()).isPresent()) {
             throw new CustomException(ErrorCode.INVALID_USER_EXISTENCE);
         } else {
-            if (userRequestDto.isAdmin()) {
-                if (userRequestDto.getAdminToken() == null) {
-                    throw new CustomException(ErrorCode.INVALID_TOKEN);
-                } else {
-                    if (userRequestDto.getAdminToken().equals(ADMIN_TOKEN)) {
-                        userRepository.save(new User(userRequestDto.getUsername(), userRequestDto.getPassword(), UserRoleEnum.ADMIN));
-                    } else {
-                        throw new CustomException(ErrorCode.INVALID_TOKEN);
-                    }
-                }
-            } else {
+            if (userRequestDto.isAdmin() && userRequestDto.getAdminToken().equals(ADMIN_TOKEN)) {
+                userRepository.save(new User(userRequestDto.getUsername(), userRequestDto.getPassword(), UserRoleEnum.ADMIN));
+            }else if (!userRequestDto.isAdmin()){
                 userRepository.save(new User(userRequestDto.getUsername(), userRequestDto.getPassword(), UserRoleEnum.USER));
+            } else {
+                throw new CustomException(ErrorCode.INVALID_TOKEN);
             }
         }
         return new ResponseEntity<>("회원가입 성공.", HttpStatus.OK);
@@ -66,8 +82,7 @@ public class UserService {
         if (refreshToken.isPresent()) {
             refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken()));
         } else {
-            RefreshToken newToken = new RefreshToken(tokenDto.getRefreshToken(), user.getUsername());
-            refreshTokenRepository.save(newToken);
+            refreshTokenRepository.save(new RefreshToken(tokenDto.getRefreshToken(), user.getUsername()));
         }
         servletResponse.addHeader(JwtUtil.ACCESS_KEY, tokenDto.getAccessToken());
         servletResponse.addHeader(JwtUtil.REFRESH_KEY, tokenDto.getRefreshToken());

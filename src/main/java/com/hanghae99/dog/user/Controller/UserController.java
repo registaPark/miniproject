@@ -1,24 +1,21 @@
 package com.hanghae99.dog.user.Controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hanghae99.dog.global.Security.UserDetailsImpl;
-import com.hanghae99.dog.user.Dto.StatusResponseDto;
 import com.hanghae99.dog.user.Dto.UserRequestDto;
 import com.hanghae99.dog.user.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+@CrossOrigin(origins="*", exposedHeaders = {"ACCESS_KEY", "REFRESH_KEY"})
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
-    
 
     private final UserService userService;
 
