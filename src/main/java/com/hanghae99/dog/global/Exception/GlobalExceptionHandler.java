@@ -30,7 +30,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
 
-
 //    컨트롤러에 @PreAuthorize 어노테이션을 사용하여 인증된 사용자가 아닐경우 바디에 "인증되지 않은 사용자입니다."을 반환하는 예외처리 핸들러
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex) {
