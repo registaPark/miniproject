@@ -13,7 +13,6 @@ public enum ErrorCode {
     INVALID_USER(HttpStatus.BAD_REQUEST, "작성자만 삭제/수정할 수 있습니다."),
     INVALID_USER_EXISTENCE(HttpStatus.BAD_REQUEST, "중복된 username 입니다."),
     INVALID_USER_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호를 다시 입력해주세요."),
-    ONLY_ADMIN(HttpStatus.BAD_REQUEST, "관리자 전용입니다."),
 
 
 
