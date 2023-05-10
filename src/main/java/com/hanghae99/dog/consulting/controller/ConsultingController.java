@@ -13,18 +13,22 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @CrossOrigin("*")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/post/")
+@Validated
 public class ConsultingController {
     private final ConsultingService consultingService;
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/consulting")
-    public ResponseEntity<?> applyConsulting(@RequestBody ConsultingRequestsDto dto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<?> applyConsulting(@RequestBody @Validated ConsultingRequestsDto dto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         Long userId = user.getId();
         ConsultingResponseDto responseDto = consultingService.applyConsulting(dto, userId);

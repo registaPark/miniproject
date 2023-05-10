@@ -71,8 +71,13 @@ public class UserService {
         }
         servletResponse.addHeader(JwtUtil.ACCESS_KEY, tokenDto.getAccessToken());
         servletResponse.addHeader(JwtUtil.REFRESH_KEY, tokenDto.getRefreshToken());
+
+        // 셋쿠키 방식
+//        servletResponse.addHeader("Set-Cookie", JwtUtil.ACCESS_KEY + "=" + tokenDto.getAccessToken() + "; Path=/; HttpOnly; SameSite=Strict");
+//        servletResponse.addHeader("Set-Cookie", JwtUtil.REFRESH_KEY + "=" + tokenDto.getRefreshToken() + "; Path=/; HttpOnly; SameSite=Strict");
         return new ResponseEntity<>("로그인 성공.", HttpStatus.OK);
     }
+
 
     @Transactional
     public ResponseEntity<String> logout(User user, HttpServletResponse servletResponse) {
