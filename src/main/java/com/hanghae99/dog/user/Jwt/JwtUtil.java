@@ -131,6 +131,8 @@ public class JwtUtil {
             return "access";
         else if ((accessToken == null) && (refreshToken != null && refreshTokenValid(refreshToken)))
             return "refresh";
+        else if (accessToken == null && refreshToken == null)
+            return "fail";
         else
             return "notExpect";
     }
