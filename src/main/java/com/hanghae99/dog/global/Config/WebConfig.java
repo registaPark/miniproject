@@ -8,7 +8,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(final CorsRegistry registry){
         registry.addMapping("/**")
                 .exposedHeaders("ACCESS_KEY", "REFRESH_KEY")
-                .allowedOriginPatterns("*")
+                .allowedOrigins("*")
                 .allowCredentials(true)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS"); // 허용할 HTTP method
     }
