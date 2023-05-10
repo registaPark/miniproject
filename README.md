@@ -13,10 +13,10 @@
 - 상담 신청 작성,삭제
 
 # 배포기능
-![118360320-078e9600-b5c2-11eb-88bb-fc58ade638fa.png](..%2F..%2FDesktop%2F118360320-078e9600-b5c2-11eb-88bb-fc58ade638fa.png)
+![118360320-078e9600-b5c2-11eb-88bb-fc58ade638fa](https://github.com/registaPark/miniproject/assets/118441395/0f5a1376-d127-4d58-b271-735757711fd0)
 
 # ERD 설계
-![함께하개 ERD.png](..%2F..%2FDesktop%2F%ED%95%A8%EA%BB%98%ED%95%98%EA%B0%9C%20ERD.png)
+![함께하개 ERD](https://github.com/registaPark/miniproject/assets/118441395/a302398e-81f5-4c2b-88ce-b6917888ecca)
 
 # API 명세 및 조원정보
 https://www.notion.so/c6c5e7347a6649eca705a6f495f8470f
