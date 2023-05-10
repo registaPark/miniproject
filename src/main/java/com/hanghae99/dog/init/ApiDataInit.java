@@ -38,7 +38,7 @@ public class ApiDataInit {
             if(conn.getResponseCode() != 200){
                 throw new RuntimeException("Api를 불러올수 없습니다."); //응답코드 200이 아닐시 예외 발생
             }
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(br);
             JsonNode rows = jsonNode.path("TbAdpWaitAnimalView").path("row");
