@@ -27,7 +27,6 @@ public class UserController {
     public ResponseEntity<String> login(@RequestBody UserRequestDto userRequestDto, HttpServletResponse response) {
         return userService.login(userRequestDto, response);
     }
-
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response) {
         return userService.logout(userDetails.getUser(), response);
