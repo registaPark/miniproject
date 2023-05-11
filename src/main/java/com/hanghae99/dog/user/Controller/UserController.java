@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-@CrossOrigin(origins="*", exposedHeaders = {"ACCESS_KEY", "REFRESH_KEY"})
+
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -27,7 +27,6 @@ public class UserController {
     public ResponseEntity<String> login(@RequestBody UserRequestDto userRequestDto, HttpServletResponse response) {
         return userService.login(userRequestDto, response);
     }
-
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response) {
         return userService.logout(userDetails.getUser(), response);
