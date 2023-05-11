@@ -18,6 +18,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -44,6 +45,9 @@ public class ApiDataInit {
             JsonNode rows = jsonNode.path("TbAdpWaitAnimalView").path("row");
             for (JsonNode rowNode : rows) { // Json에서 각 데이터들을 Animal엔티티로 매핑해주기 위한 작업
                 long animalId = rowNode.path("ANIMAL_NO").asLong();
+                if (animalRepository.findById(animalId).isPresent()) {
+                    continue;
+                }
                 String name = rowNode.path("NM").asText();
                 String entrncDate = rowNode.path("ENTRNC_DATE").asText();
                 DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -98,6 +102,10 @@ public class ApiDataInit {
                 for (JsonNode row : rows) { // image엔티티로 매핑해주기 위한 작업
                     String imageUrl = row.path("PHOTO_URL").asText();
                     Long animalNo = row.path("ANIMAL_NO").asLong();
+                    Optional<Image> existingImage = imageRepository.findByUrl(imageUrl);
+                    if (existingImage.isPresent()) {
+                        continue;
+                    }
                     Image image = Image.builder().animal(animalHashMap.get(animalNo)).url(imageUrl).build(); // 이미지 엔티티 생성
                     imageRepository.save(image); // 이미지 저장
                 }
