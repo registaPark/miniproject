@@ -5,9 +5,6 @@
 우리는 지속적으로 이 웹 페이지를 발전시켜 나가며, 입양에 대한 적극적인 참여와 동물 복지 증진에 기여하고자 합니다. 
 함께하개를 통해 평생의 행복한 반려동물을 만날 수 있는 기회를 놓치지 마세요!
 
-# 기술스택
-
-
 # 구현기능
 - 로그인 기능
 - 유기동물 목록 보기
@@ -16,7 +13,10 @@
 - 상담 신청 작성,삭제
 
 # 배포기능
-
-# 유즈케이스
+![118360320-078e9600-b5c2-11eb-88bb-fc58ade638fa](https://github.com/registaPark/miniproject/assets/118441395/0f5a1376-d127-4d58-b271-735757711fd0)
 
 # ERD 설계
+![함께하개 ERD](https://github.com/registaPark/miniproject/assets/118441395/a302398e-81f5-4c2b-88ce-b6917888ecca)
+
+# API 명세 및 조원정보
+https://www.notion.so/c6c5e7347a6649eca705a6f495f8470f
