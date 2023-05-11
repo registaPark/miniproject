@@ -70,6 +70,7 @@ public class WebSecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("http://3.34.47.87:3000");
         configuration.addExposedHeader(JwtUtil.ACCESS_KEY);
         configuration.addExposedHeader(JwtUtil.REFRESH_KEY);
 
