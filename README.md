@@ -12,11 +12,20 @@
 - 유기동물 관련 댓글 작성,수정,삭제 및 좋아요
 - 상담 신청 작성,삭제
 
-# 배포기능
+# 배포기능🕹
+GitHub Action과 AWS S3,EC2,CodeDeploy를 활용해서 , Spring Boot 웹 어플리케이션을
+EC2 서버에 자동으로 업데이트 된 최신 코드를 빌드해주는 시스템을 구축했다.
 ![118360320-078e9600-b5c2-11eb-88bb-fc58ade638fa](https://github.com/registaPark/miniproject/assets/118441395/0f5a1376-d127-4d58-b271-735757711fd0)
 
-# ERD 설계
-![함께하개 ERD](https://github.com/registaPark/miniproject/assets/118441395/a302398e-81f5-4c2b-88ce-b6917888ecca)
+# ERD 설계📑
+![함께하개](https://github.com/registaPark/miniproject/assets/118441395/3ad96115-d38e-4772-9144-254792847f3e)
 
-# API 명세 및 조원정보
+# API 명세 및 조원정보🧾
 https://www.notion.so/c6c5e7347a6649eca705a6f495f8470f
+
+# 트러블 슈팅🚀
+https://www.notion.so/c6c5e7347a6649eca705a6f495f8470f
+- CI/CD Credential 실패
+- CORS 문제
+- Valid 문제
+- DoFilter 중복 문제
