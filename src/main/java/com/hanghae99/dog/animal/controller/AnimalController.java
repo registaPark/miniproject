@@ -16,14 +16,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AnimalController {
     private final AnimalService animalService;
-    @CrossOrigin("*")
+//    @CrossOrigin("*")
     @GetMapping("/list") // AniamlList 가져오기
     public ResponseEntity<List<AnimalResponseDto>> findAnimalList(){
         return ResponseEntity.ok(animalService.findAnimalList());
     }
 
 
-    @CrossOrigin("*")
+//    @CrossOrigin("*")
     @GetMapping("/detail/{id}") //AnimalNo값으로 가져오기
     public ResponseEntity<AllResponseDto> findByAnimalId(@PathVariable Long id){
         return ResponseEntity.ok(animalService.findAnimalById(id));

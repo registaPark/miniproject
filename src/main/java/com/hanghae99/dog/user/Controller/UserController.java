@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-@CrossOrigin(origins="*", exposedHeaders = {"ACCESS_KEY", "REFRESH_KEY"})
+
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
