@@ -44,13 +44,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         StringBuilder builder = new StringBuilder();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            builder.append("{");
-            builder.append(fieldError.getField());
-            builder.append("}(은)는 ");
             builder.append(fieldError.getDefaultMessage());
             builder.append(" 입력된 값: {");
             builder.append(fieldError.getRejectedValue());
-            builder.append("} ");
+            builder.append("} \n\n");
         }
         log.error(builder.toString());
         return handleExceptionInternal(ex, builder.toString(), headers, status, request);
