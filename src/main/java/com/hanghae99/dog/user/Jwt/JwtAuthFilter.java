@@ -34,25 +34,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String checkRefresh = jwtUtil.checkRefresh(accessToken, refreshToken);
         if (checkRefresh.equals("success")) {
             setAuthentication(jwtUtil.getUserInfoFromToken(accessToken));
+            filterChain.doFilter(request, response);
         } else if (checkRefresh.equals("access")) {
             String username = jwtUtil.getUserInfoFromToken(accessToken);
             User user = jwtUtil.checkGetUserByUsername(username);
             String newRefreshToken = jwtUtil.createToken(username, user.getRole(), "Refresh");
             response.setHeader(JwtUtil.REFRESH_KEY, newRefreshToken);
             setAuthentication(username);
+            filterChain.doFilter(request, response);
         } else if (checkRefresh.equals("refresh")) {
             String username = jwtUtil.getUserInfoFromToken(refreshToken);
             User user = jwtUtil.checkGetUserByUsername(username);
             String newAccessToken = jwtUtil.createToken(username, user.getRole(), "Access");
             response.setHeader(JwtUtil.ACCESS_KEY, newAccessToken);
             setAuthentication(username);
+            filterChain.doFilter(request, response);
         } else if (checkRefresh.equals("fail")) {
             filterChain.doFilter(request, response);
         } else {
             jwtExceptionHandler(response, ErrorCode.INVALID_TOKEN.getMessage(), ErrorCode.INVALID_TOKEN.getHttpStatus().value());
             return;
         }
-        filterChain.doFilter(request, response);
     }
 
     public void setAuthentication(String username) {

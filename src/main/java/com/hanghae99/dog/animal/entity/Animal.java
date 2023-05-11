@@ -1,5 +1,6 @@
 package com.hanghae99.dog.animal.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hanghae99.dog.image.entity.Image;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class Animal {
     @Column(length = 10000)
     private String tmpr;
     private String introduceUrl;
+    @JsonIgnore
     @OneToMany(mappedBy = "animal",cascade = CascadeType.REMOVE)
     private List<Image> images = new ArrayList<>();
 
